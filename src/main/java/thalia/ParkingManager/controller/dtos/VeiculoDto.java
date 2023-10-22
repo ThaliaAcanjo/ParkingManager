@@ -10,7 +10,9 @@ public record VeiculoDto(Long id,
 												 String marca,
 												 String modelo,
 												 String cor,
-												 TipoVeiculo tipoVeiculo) {
+												 TipoVeiculo tipoVeiculo,
+												 String nomeDono,
+												 String documentoDono) {
 
 		public VeiculoDto(Veiculo model) {
 				this(
@@ -19,7 +21,9 @@ public record VeiculoDto(Long id,
 								model.getMarca(),
 								model.getModelo(),
 								model.getCor(),
-								model.getTipoVeiculo()
+								model.getTipoVeiculo(),
+								model.getNomeDono(),
+								model.getDocumentoDono()
 				);
 		}
 
@@ -31,6 +35,8 @@ public record VeiculoDto(Long id,
 				model.setModelo(ofNullable(this.modelo).orElse(null));
 				model.setCor(ofNullable(this.cor).orElse(null));
 				model.setTipoVeiculo(ofNullable(this.tipoVeiculo).orElse(null));
+				model.setNomeDono(ofNullable(this.nomeDono).orElse(null));
+				model.setDocumentoDono(ofNullable(this.documentoDono).orElse(null));
 				return model;
 		}
 

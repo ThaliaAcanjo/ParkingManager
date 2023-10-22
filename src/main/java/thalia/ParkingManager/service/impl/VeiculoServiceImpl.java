@@ -1,56 +1,76 @@
 package thalia.ParkingManager.service.impl;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import thalia.ParkingManager.exceptionhandler.BadRequestException;
+import thalia.ParkingManager.exceptionhandler.NotFoundException;
 import thalia.ParkingManager.model.Veiculo;
 import thalia.ParkingManager.repository.VeiculoRepository;
 import thalia.ParkingManager.service.VeiculoService;
 import thalia.ParkingManager.service.exception.BusinessException;
 
 import java.util.List;
-import java.util.Optional;
-
-import static java.util.Optional.ofNullable;
 
 @Service
 public class VeiculoServiceImpl implements VeiculoService {
-		private static final Long UNCHANGEABLE_USER_ID = 1L;
-		@Autowired
-		private VeiculoRepository veiculoRepository;
-		@Override
+		private static final Long UNCHANGEABLE_VEICULO_ID = 0L;
+		private final VeiculoRepository veiculoRepository;
+		public VeiculoServiceImpl(VeiculoRepository veiculoRepository) {
+				this.veiculoRepository = veiculoRepository;
+		}
+
+		@Transactional(readOnly = true)
 		public List<Veiculo> findAll() {
-				return null;
+				return this.veiculoRepository.findAll();
 		}
 
-		@Override
-		public Veiculo findById(Long aLong) {
-				return null;
+		@Transactional(readOnly = true)
+		public Veiculo findById(Long id) {
+				return this.veiculoRepository.findById(id).orElseThrow(NotFoundException::new);
 		}
 
-		@Override
+		@Transactional
 		public Veiculo create(Veiculo veiculoCreate) {
-				ofNullable(veiculoCreate).orElseThrow(() -> new BusinessException("Veiculo to create must not be null."));
-				ofNullable(veiculoCreate.getPlaca()).orElseThrow(() -> new BusinessException("Placa must not be null."));
-				ofNullable(veiculoCreate.getModelo()).orElseThrow(() -> new BusinessException("Modelo must not be null."));
-				ofNullable(veiculoCreate.getTipoVeiculo()).orElseThrow(() -> new BusinessException("Tipo Veiculo must not be null."));
+				if (veiculoCreate.getPlaca() == null)
+						throw new BadRequestException("O campo placa é obrigatório");
+				if (veiculoCreate.getModelo() == null)
+						throw new BadRequestException("O campo modelo é obrigatório");
+				if (veiculoCreate.getMarca() == null)
+						throw new BadRequestException("O campo marca é obrigatório");
+				if (veiculoCreate.getCor() == null)
+						throw new BadRequestException("O campo cor é obrigatório");
+				if (veiculoCreate.getTipoVeiculo() == null)
+						throw new BadRequestException("O campo tipo veículo é obrigatório");
+				if (veiculoCreate.getNomeDono() == null)
+						throw new BadRequestException("O campo nome do dono é obrigatório");
+				if (veiculoCreate.getDocumentoDono() == null)
+						throw new BadRequestException("O campo documento do dono é obrigatório");
 
 				this.validateChangeableId(veiculoCreate.getId(), "created");
 				return this.veiculoRepository.save(veiculoCreate);
 		}
 
-		@Override
-		public Veiculo update(Long aLong, Veiculo entity) {
-				return null;
+		@Transactional
+		public Veiculo update(Long id, Veiculo veiculo) {
+				this.validateChangeableId(id, "updated");
+				Veiculo veiculoUpdate = this.findById(id);
+				if (!veiculoUpdate.getId().equals(veiculo.getId())){
+						throw new BadRequestException("update IDs must be the same.");
+				}
+
+				return veiculoRepository.save(veiculo);
 		}
 
 		@Override
-		public void delete(Long aLong) {
-
+		public void delete(Long id) {
+				this.validateChangeableId(id, "deleted");
+				Veiculo veiculo = this.findById(id);
+				veiculoRepository.delete(veiculo);
 		}
 
 		private void validateChangeableId(Long id, String operation) {
-				if (UNCHANGEABLE_USER_ID.equals(id)) {
-						throw new BusinessException("User with ID %d can not be %s.".formatted(UNCHANGEABLE_USER_ID, operation));
+				if (UNCHANGEABLE_VEICULO_ID.equals(id)) {
+						throw new BusinessException("User with ID %d can not be %s.".formatted(UNCHANGEABLE_VEICULO_ID, operation));
 				}
 		}
 

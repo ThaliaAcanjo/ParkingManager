@@ -9,6 +9,10 @@ public class Veiculo {
 		@Id
 		@GeneratedValue(strategy = GenerationType.IDENTITY)
 		private Long id;
+
+		private String nomeDono;
+
+		private String documentoDono;
 		@Column(unique = true)
 		private String placa;
 		private String marca;
@@ -65,15 +69,19 @@ public class Veiculo {
 				this.tipoVeiculo = tipoVeiculo;
 		}
 
-		@Override
-		public String toString() {
-				return "Veiculo{" +
-								"id=" + id +
-								", placa='" + placa + '\'' +
-								", marca='" + marca + '\'' +
-								", modelo='" + modelo + '\'' +
-								", cor='" + cor + '\'' +
-								", tipoVeiculo=" + tipoVeiculo +
-								'}';
+		public String getNomeDono() {
+				return nomeDono;
+		}
+
+		public void setNomeDono(String nomeDono) {
+				this.nomeDono = nomeDono;
+		}
+
+		public String getDocumentoDono() {
+				return documentoDono;
+		}
+
+		public void setDocumentoDono(String documentoDono) {
+				this.documentoDono = documentoDono;
 		}
 }
