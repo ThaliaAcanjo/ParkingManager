@@ -15,7 +15,9 @@ import java.util.List;
 public class VeiculoServiceImpl implements VeiculoService {
 		private static final Long UNCHANGEABLE_VEICULO_ID = 0L;
 		private final VeiculoRepository veiculoRepository;
+
 		public VeiculoServiceImpl(VeiculoRepository veiculoRepository) {
+
 				this.veiculoRepository = veiculoRepository;
 		}
 
@@ -45,7 +47,6 @@ public class VeiculoServiceImpl implements VeiculoService {
 						throw new BadRequestException("O campo nome do dono é obrigatório");
 				if (veiculoCreate.getDocumentoDono() == null)
 						throw new BadRequestException("O campo documento do dono é obrigatório");
-
 				this.validateChangeableId(veiculoCreate.getId(), "created");
 				return this.veiculoRepository.save(veiculoCreate);
 		}
@@ -54,7 +55,7 @@ public class VeiculoServiceImpl implements VeiculoService {
 		public Veiculo update(Long id, Veiculo veiculo) {
 				this.validateChangeableId(id, "updated");
 				Veiculo veiculoUpdate = this.findById(id);
-				if (!veiculoUpdate.getId().equals(veiculo.getId())){
+				if (!veiculoUpdate.getId().equals(veiculo.getId())) {
 						throw new BadRequestException("update IDs must be the same.");
 				}
 
@@ -70,7 +71,7 @@ public class VeiculoServiceImpl implements VeiculoService {
 
 		private void validateChangeableId(Long id, String operation) {
 				if (UNCHANGEABLE_VEICULO_ID.equals(id)) {
-						throw new BusinessException("User with ID %d can not be %s.".formatted(UNCHANGEABLE_VEICULO_ID, operation));
+						throw new BusinessException("Veículo com ID %d não pode ser %s.".formatted(UNCHANGEABLE_VEICULO_ID, operation));
 				}
 		}
 
