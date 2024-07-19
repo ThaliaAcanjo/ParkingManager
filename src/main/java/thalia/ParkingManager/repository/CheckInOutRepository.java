@@ -2,8 +2,8 @@ package thalia.ParkingManager.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-import thalia.ParkingManager.model.Estabelecimento;
+import thalia.ParkingManager.model.CheckInOut;
 
 @Repository
-public interface EstabRepository extends JpaRepository<Estabelecimento, Long> {
+public interface CheckInOutRepository extends JpaRepository<CheckInOut, Long> {
 }

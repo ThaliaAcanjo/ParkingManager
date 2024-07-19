@@ -2,8 +2,9 @@ package thalia.ParkingManager.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-import thalia.ParkingManager.model.Movimento;
+import thalia.ParkingManager.model.Vehicle;
 
 @Repository
-public interface MovimentoRepository extends JpaRepository<Movimento, Long> {
+public interface VehicleRepository extends JpaRepository<Vehicle, Long> {
+		Vehicle findByLicensePlate(String licensePlate);
 }
